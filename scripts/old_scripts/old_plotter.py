@@ -2,6 +2,12 @@ import matplotlib.pylab as plt
 import csv
 import ast
 import numpy as np
+import click
+@click.command()
+@click.option('--count', default=1, help='Number of greetings.')
+@click.option('--name', prompt='Your name',
+              help='The person to greet.')
+
 
 season = input("\nEnter season number: ")
 episode = input("Enter episode number: ")
