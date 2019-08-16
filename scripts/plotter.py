@@ -10,7 +10,7 @@ print()
 if len(episode) < 2:
     episode = "0"+episode
 
-with open('the_office-all_episodes.csv','r') as csv_file:
+with open('the_office-all_episodes-dictionaries.csv','r') as csv_file:
     read_file = csv.DictReader(csv_file, fieldnames=['show', 'season', 'episode', 'characters_lines', 'characters_words'])
     for row in read_file:
         if row['season'] == season and row['episode'] == episode:

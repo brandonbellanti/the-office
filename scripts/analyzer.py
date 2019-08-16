@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 csv_file = 'the_office-all_episodes-database.csv'
 df = pandas.read_csv(csv_file)
 
-gb = df.groupby(['season','character'])
-print(gb['words'].sum())
+gb = df.groupby(['character'])
+print(gb['lines'].sum())
 
 # # plot character
 # character = df[(df.character == 'Jim')]
