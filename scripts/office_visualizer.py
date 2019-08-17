@@ -38,5 +38,3 @@ def plot_data(season, episode, character, sortby, groupby):
     plt.show()
 
 plot_data()
-
-
