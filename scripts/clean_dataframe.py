@@ -1,14 +1,14 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot
+import string
+from nltk.tokenize import word_tokenize
 
-df = pd.read_csv('the_office-all_episodes-database.csv')
 
-characters = np.sort(df['character'].unique())
+# open csv and build dataframe
+df = pd.read_csv('the_office-all_episodes-raw_data.csv')
 
-# for character in characters:
-#     print(character)
 
+# correct bad spellings and groupings
 bad_spellings = {
     'AJ':['AJ, A.J.'],
     'All': [
@@ -199,8 +199,32 @@ bad_spellings = {
     'Walter': ['Walter','Walter &amp; Walter Jr'],
     'Walter Jr.': ['Walter Jr','Walt Jr.'],
 }
-
 for name, bad_spelling in bad_spellings.items():
     df['character'][df['character'].isin(bad_spelling)] = name
 
-print(df.head(1000))
+
+# create new series for character types
+main_characters = ['Michael','Jim','Dwight','Pam','Phyllis','Stanley','Oscar','Angela','Creed','Darryl','Kevin','Ryan','Kelly','Toby','Meredith','Andy','Erin','Stanley','All']
+recurring_characters = ['Jan','David','Katy','Bob','Hank','Karen','Robert','Deangelo','AJ','Jo','Pete','Charles', 'Holly','Gabe', 'Nate','Mose','Clark','Nellie','Roy','Carol','Todd']
+df['character_type'] = 'other'
+df['character_type'][df['character'].isin(main_characters)] = 'main'
+df['character_type'][df['character'].isin(recurring_characters)] = 'recurring'
+
+
+# tokenize line
+df['tokenized_line'] = df['line'][df['line'].notnull()].apply(lambda x: x.translate(str.maketrans('', '', string.punctuation)))
+df['tokenized_line'] = df['tokenized_line'][df['tokenized_line'].notnull()].apply(lambda x: x.lower())
+df['tokenized_line'] = df['tokenized_line'][df['tokenized_line'].notnull()].apply(lambda x: [word for word in word_tokenize(x)])
+
+
+# get word count from tokenized line
+df['word_count'] = df['tokenized_line'][df['tokenized_line'].notnull()].apply(lambda x: len(x))
+
+
+# reorder series and write to new dataframe
+df = df[['season','episode','character','character_type','line','word_count']]
+df.to_csv('the_office-all_episodes.csv')
+
+
+# print head to verify
+print(df.head())
