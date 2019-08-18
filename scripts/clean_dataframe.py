@@ -223,7 +223,7 @@ df['word_count'] = df['tokenized_line'][df['tokenized_line'].notnull()].apply(la
 
 # reorder series and write to new dataframe
 df = df[['season','episode','character','character_type','line','word_count']]
-df.to_csv('the_office-all_episodes.csv')
+df.to_csv('the_office-all_episodes.csv', index=False)
 
 
 # print head to verify
